@@ -8,11 +8,11 @@ public class EnemyTrackingState : EnemyState
     {
         fish.agent.enabled = true;
         fish.agent.speed = fish.moveSpeed;
-        fish.GetComponent<Animator>().SetBool("Swimming", true);
+        fish.GetComponent<Fish>().animator.SetBool("Swimming", true);
     }
     public override void ExitState() 
     {
-        fish.GetComponent<Animator>().SetBool("Swimming", false);
+        fish.GetComponent<Fish>().animator.SetBool("Swimming", false);
     }
     public override void Update() 
     {

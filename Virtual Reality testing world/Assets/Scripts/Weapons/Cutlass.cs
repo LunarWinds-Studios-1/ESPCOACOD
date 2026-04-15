@@ -17,7 +17,7 @@ public class Cutlass : Weapon
             speed = Mathf.Abs(swordVelocityReference.action.ReadValue<Vector3>().magnitude + player.rb.linearVelocity.magnitude);
             if (speed > minimumSpeed)
             {
-                other.gameObject.GetComponent<IDamageable>().Damage(damage * speed);
+                other.gameObject?.GetComponent<IDamageable>()?.Damage(damage * speed);
             }
         }
     }

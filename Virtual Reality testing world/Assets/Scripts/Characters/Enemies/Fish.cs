@@ -10,6 +10,7 @@ public class Fish : MonoBehaviour, IDamageable
     [SerializeField] GameObject blood;
     [SerializeField] GameObject bloodLight;
     [SerializeField] HealthBar healthBar;
+    [SerializeField] public Animator animator;
     public float healthPerBite = 10;
     [HideInInspector] public NavMeshAgent agent;
 

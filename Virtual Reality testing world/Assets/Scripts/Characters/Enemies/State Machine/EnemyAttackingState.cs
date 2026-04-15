@@ -6,7 +6,7 @@ public class EnemyAttackingState : EnemyState
     public override void EnterState() 
     {
         fish.agent.enabled = false;
-        fish.GetComponent<Animator>().SetTrigger("Attack");
+        fish.animator.SetTrigger("Attack");
     }
     public override void ExitState() { }
     public override void Update() 
