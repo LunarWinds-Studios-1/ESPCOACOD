@@ -156,8 +156,10 @@ MonoBehaviour:
     m_Bits: 65
   player: {fileID: 0}
   bulletHolePrefab: {fileID: 100002, guid: 957385c45b877e645a128e11a3efb2f9, type: 3}
+  bulletTrail: {fileID: 2894225938407913626, guid: e63c0c89ddc53be409e8b8061d66afbc, type: 3}
   range: 50
   fireOrigin: {fileID: 1976686014688815293}
+  bulletTravelTime: 0.1
   fireSound: {fileID: 8300000, guid: c36654f3ed8f147418f1c6abcde29b72, type: 3}
   reloadTime: 2
   bulletsPerShot: 6
