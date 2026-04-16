@@ -7,6 +7,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected LayerMask damageMask;
 
     public Player player;
+
+    public string name = "Unnamed Weapon";
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public virtual void Start()
     {

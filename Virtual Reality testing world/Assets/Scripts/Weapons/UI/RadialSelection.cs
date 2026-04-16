@@ -123,7 +123,8 @@ public class RadialSelection : MonoBehaviour
             GameObject part = Instantiate(radialPart, menuTransform);
             part.transform.position = menuTransform.position;
             part.transform.eulerAngles = radialPartEulerAngle;
-
+            part.GetComponent<RadialPart>().weaponName = weaponInteraction.weapons[i].name;
+            part.GetComponent<RadialPart>().SetAngles(transform.eulerAngles, numberOfSegments);
             part.GetComponent<Image>().fillAmount = (1 / (float)num) - (margins / 360);
 
             parts.Add(part);
