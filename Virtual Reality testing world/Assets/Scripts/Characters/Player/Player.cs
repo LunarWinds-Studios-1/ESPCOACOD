@@ -22,6 +22,12 @@ public class Player : MonoBehaviour, IDamageable
     Cooldown eatCooldown;
     public Rigidbody rb;
 
+    bool dead = false;
+
+
+    [Header("Death")]
+    [SerializeField] DeathScreenTransition deathScreenTransition;
+    [SerializeField] GameObject DeathDoor;
 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -88,7 +94,12 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        throw new NotImplementedException();
+        if (!dead)
+        {
+            dead = true;
+            deathScreenTransition.TransitionToDeathScreen();
+            DeathDoor.transform.parent = null;
+        }
     }
 
     public void TestPlayerHealth()
