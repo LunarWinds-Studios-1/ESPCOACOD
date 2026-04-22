@@ -8,6 +8,7 @@ public class Gun : Weapon
 {
     [SerializeField] GameObject bulletHolePrefab;
     [SerializeField] TrailRenderer bulletTrail;
+    [SerializeField] GameObject bubbles;
     [SerializeField] protected float range = 50;
     [SerializeField] protected Transform fireOrigin;
     [SerializeField] protected float bulletTravelTime = 0.1f;
@@ -23,7 +24,10 @@ public class Gun : Weapon
         if (hit.collider != null)
         {
             TrailRenderer trail = Instantiate(bulletTrail, fireOrigin.position, Quaternion.identity);
-            StartCoroutine(BulletTrail(trail, hit));
+            GameObject bubbles = Instantiate(this.bubbles, fireOrigin.position, Quaternion.identity);
+            bubbles.transform.LookAt(hit.point);
+            StartCoroutine(BulletTrail(trail, bubbles, hit));
+            bubbles.GetComponent<BubbleTrail>().distance = Mathf.Abs(Vector3.Distance(fireOrigin.position, hit.point));
             if (hit.collider.GetComponent<IDamageable>() != null)
             {
                 IDamageable enemy = hit.collider.gameObject.GetComponent<IDamageable>();
@@ -56,21 +60,22 @@ public class Gun : Weapon
         firing = false;
     }
 
-    public IEnumerator BulletTrail(TrailRenderer trail, RaycastHit hit)
+    public IEnumerator BulletTrail(TrailRenderer trail, GameObject bubbles, RaycastHit hit)
     {
         float time = 0;
         Vector3 startPosition = trail.gameObject.transform.position;
-
+        trail.transform.LookAt(hit.point);
+        
         while (time < 1)
         {
             trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
             time += Time.deltaTime / bulletTravelTime;
-
             yield return null;
         }
 
         trail.transform.position = hit.point;
 
-        Destroy(trail, trail.time);
+        Destroy(trail.gameObject, trail.time);
+        Destroy(bubbles, 1.5f);
     }
 }

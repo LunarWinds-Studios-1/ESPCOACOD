@@ -28,6 +28,7 @@ public class Player : MonoBehaviour, IDamageable
     [Header("Death")]
     [SerializeField] DeathScreenTransition deathScreenTransition;
     [SerializeField] GameObject DeathDoor;
+    [SerializeField] GameObject WinScreen;
 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -99,6 +100,7 @@ public class Player : MonoBehaviour, IDamageable
             dead = true;
             deathScreenTransition.TransitionToDeathScreen();
             DeathDoor.transform.parent = null;
+            Instantiate(WinScreen, Camera.main.transform.position + transform.forward * 5, Quaternion.identity);
         }
     }
 
