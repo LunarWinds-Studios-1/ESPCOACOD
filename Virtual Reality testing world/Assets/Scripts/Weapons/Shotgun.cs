@@ -14,6 +14,7 @@ public class Shotgun : Gun
     public override void Start()
     {
         base.Start();
+        name = "Minnow Shotgun";
         shotsRemaining = shotsPerLoad;
         reloadCooldown = new Cooldown(reloadTime);
     }

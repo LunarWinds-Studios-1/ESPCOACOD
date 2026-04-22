@@ -10,7 +10,7 @@ public class Hurtbox : MonoBehaviour
     {
         if ((damageMask.value & (1 << other.transform.gameObject.layer)) > 0)
         {
-            other?.GetComponent<IDamageable>().Damage(damage);
+            other?.GetComponent<IDamageable>()?.Damage(damage);
         }
     }
 }

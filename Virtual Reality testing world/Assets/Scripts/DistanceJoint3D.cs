@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-
+[RequireComponent(typeof(Rigidbody))]
 public class DistanceJoint3D : MonoBehaviour
 {
     public Rigidbody ConnectedRigidbody;

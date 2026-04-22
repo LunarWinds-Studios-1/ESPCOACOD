@@ -10,6 +10,7 @@ public class Fish : MonoBehaviour, IDamageable
     [SerializeField] GameObject blood;
     [SerializeField] GameObject bloodLight;
     [SerializeField] HealthBar healthBar;
+    [SerializeField] public Animator animator;
     public float healthPerBite = 10;
     [HideInInspector] public NavMeshAgent agent;
 
@@ -34,6 +35,8 @@ public class Fish : MonoBehaviour, IDamageable
     public float aggroRadius;
     public float attackRadius;
 
+    GameManager manager;
+
     //State machine stuff
     public EnemyStateMachine stateMachine;
     public EnemyIdleState idleState;
@@ -45,6 +48,8 @@ public class Fish : MonoBehaviour, IDamageable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        manager = FindFirstObjectByType<GameManager>();
+        manager.freezeEnemies += OnFreezeEnemies;
         stateMachine = new EnemyStateMachine();
         idleState = new EnemyIdleState(this, stateMachine);
         trackingState = new EnemyTrackingState(this, stateMachine);
@@ -160,6 +165,7 @@ public class Fish : MonoBehaviour, IDamageable
 
     public void Die()
     {
+        manager.freezeEnemies -= OnFreezeEnemies;
         Destroy(gameObject);
     }
 
@@ -179,6 +185,13 @@ public class Fish : MonoBehaviour, IDamageable
         }
         
         this.active = active;
+    }
+
+    public void OnFreezeEnemies(object sender, EventArgs args)
+    {
+        agent.speed = 0;
+        agent.enabled = false;
+        animator.speed = 0;
     }
 
 }

@@ -10,7 +10,7 @@ public class EnemyFleeingState : EnemyState
     Vector2 Direction;
     public override void EnterState() 
     {
-        fish.GetComponent<Animator>().SetBool("Swimming", true);
+        fish.animator.SetBool("Swimming", true);
         fleeCooldown = new Cooldown(maximumFleeTime);
         fleeCooldown.StartCooldown();
         fish.agent.enabled = true;
@@ -23,7 +23,7 @@ public class EnemyFleeingState : EnemyState
     public override void ExitState() 
     {
         fish.agent.speed = fish.moveSpeed;
-        fish.GetComponent<Animator>().SetBool("Swimming", false);
+        fish.animator.SetBool("Swimming", false);
     }
     public override void PhysicsUpdate() { }
     public override void Update() 

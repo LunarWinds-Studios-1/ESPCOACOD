@@ -23,6 +23,7 @@ public class MachineGun : Gun
     public override void Start()
     {
         base.Start();
+        name = "Machine Gun";
         rechargeCooldown = new Cooldown(rechargeTime);
         fireCooldown = new Cooldown(1 / fireRate);
         ambient = GetComponent<AudioSource>();

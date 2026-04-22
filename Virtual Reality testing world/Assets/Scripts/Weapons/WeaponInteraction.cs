@@ -14,7 +14,7 @@ public class WeaponInteraction : MonoBehaviour
         activateWeapon.action.performed += OnActivateWeapon;
         activateWeapon.action.canceled += OnReleaseWeapon;
         SetSelectedWeapon(0);
-        Debug.Log("Initialiazed");
+        
     }
 
     // Update is called once per frame

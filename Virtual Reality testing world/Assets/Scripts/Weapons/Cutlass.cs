@@ -9,7 +9,11 @@ public class Cutlass : Weapon
     float speed;
 
     [SerializeField] float minimumSpeed = 0.5f;
-    
+
+    private void Start()
+    {
+        name = "Cutlass";
+    }
     private void OnTriggerEnter(Collider other)
     {
         if ((damageMask.value & (1 << other.transform.gameObject.layer)) <= 0)
@@ -17,7 +21,7 @@ public class Cutlass : Weapon
             speed = Mathf.Abs(swordVelocityReference.action.ReadValue<Vector3>().magnitude + player.rb.linearVelocity.magnitude);
             if (speed > minimumSpeed)
             {
-                other.gameObject.GetComponent<IDamageable>().Damage(damage * speed);
+                other.gameObject?.GetComponent<IDamageable>()?.Damage(damage * speed);
             }
         }
     }
