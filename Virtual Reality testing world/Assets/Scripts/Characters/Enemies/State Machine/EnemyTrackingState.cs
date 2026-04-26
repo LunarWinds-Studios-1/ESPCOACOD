@@ -16,9 +16,14 @@ public class EnemyTrackingState : EnemyState
     }
     public override void Update() 
     {
-        if (fish.active)
+        if (fish.active && fish.agent.isOnNavMesh)
         {
             fish.agent.destination = new Vector3(fish.target.position.x, -13, fish.target.position.z);
+        } if (!fish.agent.isOnNavMesh)
+        {
+            Vector3 reference = Vector3.zero;
+            fish.agent.baseOffset = 0;
+            fish.transform.position = Vector3.SmoothDamp(fish.transform.position, Vector3.zero, ref reference, 0.01f);
         }
         /*if (active)
         {

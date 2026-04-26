@@ -324,7 +324,7 @@ Rigidbody:
   m_GameObject: {fileID: 8930071718478942841}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 3
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -398,6 +398,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: -5249260874057015174, guid: e4f5c67c384069e43b62d1b7dcf4ca25, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 21bbb5d794a30184088c4a0790f2271d, type: 2}
     - target: {fileID: -3954344567844179361, guid: e4f5c67c384069e43b62d1b7dcf4ca25, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90

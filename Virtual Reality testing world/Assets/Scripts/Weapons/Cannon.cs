@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent (typeof(Shake))]
 public class Cannon : Gun
@@ -9,14 +10,18 @@ public class Cannon : Gun
     [SerializeField] int points = 100;
 
     [SerializeField] float chargeTime = 2;
+    [SerializeField] float reloadTime = 10;
     [SerializeField] float minimumVelocity = 5;
     [SerializeField] float maximumVelocity = 15;
     [SerializeField] float shakeIntensity = 0.25f;
     [SerializeField] ParticleSystem blastParticles;
+    [SerializeField] Slider chargeSlider;
     float maxTrajectoryDistance = 5;
     float projectileVelocity;
     float time = 0;
     Shake shake;
+
+    Cooldown reloadCooldown;
     public override void FireBullet()
     {
         AudioSource.PlayClipAtPoint(fireSound, fireOrigin.position);
@@ -33,23 +38,32 @@ public class Cannon : Gun
     {
         base.Start();
         shake = GetComponent<Shake>();
+        reloadCooldown = new Cooldown(reloadTime);
     }
     public override void ActivateWeapon()
     {
-        firing = true;
+        if (!reloadCooldown.isCoolingDown)
+        {
+            firing = true;
+        }
     }
 
     public override void ReleaseWeapon()
     {
-        base.ReleaseWeapon();
-        FireBullet();
-        blastParticles.Play();
+        if (!reloadCooldown.isCoolingDown)
+        {
+            base.ReleaseWeapon();
+            FireBullet();
+            blastParticles.Play();
+            reloadCooldown.StartCooldown();
+            firing = false;
+        }
     }
 
     public override void Update()
     {
         base.Update();
-        if (firing)
+        if (firing && !reloadCooldown.isCoolingDown)
         {
             projectileVelocity = Mathf.Lerp(minimumVelocity, maximumVelocity, time/ chargeTime);
             shake.intensity = Mathf.Lerp(0, shakeIntensity * 0.1f, time/ chargeTime);
@@ -66,7 +80,17 @@ public class Cannon : Gun
             shake.intensity = 0;
         }
         DrawAimTrajectory();
-        trajectory.enabled = firing;
+        
+        if (reloadCooldown.isCoolingDown)
+        {
+            chargeSlider.value = 1 - reloadCooldown.completionRatio;
+            trajectory.enabled = false;
+        }
+        else if (!reloadCooldown.isCoolingDown)
+        {
+            chargeSlider.value = 1;
+            trajectory.enabled = firing;
+        }
     }
 
     public void DrawAimTrajectory()

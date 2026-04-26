@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,6 +38,8 @@ public class Fish : MonoBehaviour, IDamageable
 
     GameManager manager;
 
+    Rigidbody rb;
+
     //State machine stuff
     public EnemyStateMachine stateMachine;
     public EnemyIdleState idleState;
@@ -44,6 +47,7 @@ public class Fish : MonoBehaviour, IDamageable
     public EnemyAttackingState attackingState;
     public EnemyFleeingState fleeingState;
     public EnemyGrappledState grappledState;
+    public EnemyRecoveringState recoveringState;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -56,6 +60,7 @@ public class Fish : MonoBehaviour, IDamageable
         attackingState = new EnemyAttackingState(this, stateMachine);
         fleeingState = new EnemyFleeingState(this, stateMachine);
         grappledState = new EnemyGrappledState(this, stateMachine);
+        recoveringState = new EnemyRecoveringState(this, stateMachine);
 
         stateMachine.CurrentState = idleState;
 
@@ -65,6 +70,7 @@ public class Fish : MonoBehaviour, IDamageable
         currentHealth = maxHealth;
 
         healthBar?.Initialize(maxHealth);
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -127,6 +133,12 @@ public class Fish : MonoBehaviour, IDamageable
         agent.baseOffset = Mathf.SmoothDamp(agent.baseOffset, targetBaseOffset, ref v, 0.2f);
     }
 
+    public void SetBaseOffsetToProperHeight()
+    {
+        float agentGroundHeight = transform.position.y - agent.baseOffset;
+        float targetBaseOffset = target.transform.position.y - agentGroundHeight + randomHeightOffset;
+    }
+
     public void ApproachTargetHeight(Vector3 targetPos)
     {
         float agentGroundHeight = transform.position.y - agent.baseOffset;
@@ -171,8 +183,19 @@ public class Fish : MonoBehaviour, IDamageable
 
     public void Knockback(Vector3 direction, float strength)
     {
-
+        UnconstrainRigidbody();
+        rb.AddForce(direction * strength, ForceMode.Impulse);
+        rb.AddTorque(UnityEngine.Random.insideUnitSphere.normalized * strength / 3, ForceMode.Impulse);
+        stateMachine.ChangeState(recoveringState);
     }
+
+    /*IEnumerator knockback (float time)
+    {
+        yield return new WaitForSeconds(time);
+        ConstrainRigidbody();
+        stateMachine.ChangeState(idleState);
+        transform.eulerAngles = Vector3.zero;
+    } */
 
     public void SetActive(bool active)
     {
@@ -199,4 +222,14 @@ public class Fish : MonoBehaviour, IDamageable
         animator.speed = 0;
     }
 
+
+    public void ConstrainRigidbody()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+    }
+
+    public void UnconstrainRigidbody()
+    {
+        rb.constraints = RigidbodyConstraints.None;
+    }
 }

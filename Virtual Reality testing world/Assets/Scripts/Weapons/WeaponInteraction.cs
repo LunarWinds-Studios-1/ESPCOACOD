@@ -8,13 +8,24 @@ public class WeaponInteraction : MonoBehaviour
     Weapon selectedWeapon;
 
     [SerializeField] InputActionReference activateWeapon;
+
+    [SerializeField] GameObject cannonChargeUI;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         activateWeapon.action.performed += OnActivateWeapon;
         activateWeapon.action.canceled += OnReleaseWeapon;
         SetSelectedWeapon(0);
-        
+        foreach (var weapon in weapons)
+        {
+            if (weapon.gameObject.GetComponent<Cannon>() != null)
+            {
+                cannonChargeUI.SetActive(true);
+            } else
+            {
+                cannonChargeUI.SetActive(false);
+            }
+        }
     }
 
     // Update is called once per frame
