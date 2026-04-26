@@ -169,6 +169,11 @@ public class Fish : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
+    public void Knockback(Vector3 direction, float strength)
+    {
+
+    }
+
     public void SetActive(bool active)
     {
         if (!active)

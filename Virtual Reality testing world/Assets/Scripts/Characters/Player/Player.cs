@@ -104,6 +104,11 @@ public class Player : MonoBehaviour, IDamageable
         }
     }
 
+    public void Knockback(Vector3 direction, float amount)
+    {
+        rb.AddForce(direction * amount, ForceMode.Impulse);
+    }
+
     public void TestPlayerHealth()
     {
         if (Input.GetKeyDown(KeyCode.D))

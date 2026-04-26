@@ -16,7 +16,7 @@ public class CannonBall : MonoBehaviour
         {
             collision.gameObject?.GetComponent<IDamageable>().Damage(damage);
         }
-        Instantiate(decal, transform.position, Quaternion.Euler(collision.GetContact(0).normal));
+        //Instantiate(decal, transform.position, Quaternion.Euler(collision.GetContact(0).normal));
         Destroy(gameObject);
     }
 }

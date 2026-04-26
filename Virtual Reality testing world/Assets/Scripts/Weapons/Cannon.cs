@@ -12,7 +12,8 @@ public class Cannon : Gun
     [SerializeField] float minimumVelocity = 5;
     [SerializeField] float maximumVelocity = 15;
     [SerializeField] float shakeIntensity = 0.25f;
-    float maxTrajectoryDistance = 1;
+    [SerializeField] ParticleSystem blastParticles;
+    float maxTrajectoryDistance = 5;
     float projectileVelocity;
     float time = 0;
     Shake shake;
@@ -42,6 +43,7 @@ public class Cannon : Gun
     {
         base.ReleaseWeapon();
         FireBullet();
+        blastParticles.Play();
     }
 
     public override void Update()

@@ -6,6 +6,7 @@ public class Explosion : MonoBehaviour
     [SerializeField] float minScale = 1;
     [SerializeField] float maxScale = 5;
     [SerializeField] float explosionTime = 0.5f;
+    [SerializeField] float knockbackForce = 10;
     Vector3 startScale;
     [SerializeField] GameObject visual;
     [SerializeField] GameObject particles;
@@ -44,7 +45,13 @@ public class Explosion : MonoBehaviour
     {
         if ((damageMask.value & (1 << other.transform.gameObject.layer)) > 0)
         {
-            other?.gameObject?.GetComponent<IDamageable>()?.Damage(damage);
+            if (other.gameObject.GetComponent<IDamageable>() != null)
+            {
+                IDamageable target = other.gameObject.GetComponent<IDamageable>();
+                target.Damage(damage);
+                Vector3 dir = new Vector3(other.transform.position.x - transform.position.x, other.transform.position.y - transform.position.y, other.transform.position.z - transform.position.z).normalized;
+                target.Knockback(dir, knockbackForce);
+            }
         }
     }
 }
