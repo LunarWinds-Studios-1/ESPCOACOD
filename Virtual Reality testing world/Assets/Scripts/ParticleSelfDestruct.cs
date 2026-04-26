@@ -14,7 +14,7 @@ public class ParticleSelfDestruct : MonoBehaviour
     {
         if (!particles.isPlaying)
         {
-            Destroy(gameObject);
+            Destroy(gameObject, 3);
         }
     }
 }

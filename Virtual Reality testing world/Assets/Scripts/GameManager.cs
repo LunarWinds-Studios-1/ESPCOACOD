@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     public void FreezeEnemyPositions()
     {
-        freezeEnemies.Invoke(this, EventArgs.Empty);
+        freezeEnemies?.Invoke(this, EventArgs.Empty);
     }
 
     public void DistortMusic()

@@ -19,5 +19,10 @@ public class Cooldown
     {
         this.cooldownTime = cooldownTime;
     }
+
+    public void SetCooldownTime(float cooldownTime) 
+    { 
+        this.cooldownTime = cooldownTime;
+    }
    
 }
