@@ -753,6 +753,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8579224713110511410}
     m_Modifications:
+    - target: {fileID: 1988994406972006829, guid: b338a23eea38b254790d21a0aa1333bb, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6661666276874341254, guid: b338a23eea38b254790d21a0aa1333bb, type: 3}
       propertyPath: m_Name
       value: Enemies Killed Panel
