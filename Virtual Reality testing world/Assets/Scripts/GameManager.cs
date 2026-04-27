@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
     public float globalDifficulty = 1;
     public int wave = 0;
+
+    public int doubloons = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

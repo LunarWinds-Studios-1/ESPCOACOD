@@ -1,5 +1,7 @@
+
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,9 +18,11 @@ public class Fish : MonoBehaviour, IDamageable
     [SerializeField] public Animator animator;
     public float healthPerBite = 10;
     [HideInInspector] public NavMeshAgent agent;
+    [SerializeField] int doubloons = 3;
 
     public Vector3 damagePoint;
     public bool frozen = false;
+    bool dead = false;
 
     [SerializeField] public Transform target;
 
@@ -39,7 +43,7 @@ public class Fish : MonoBehaviour, IDamageable
     public float aggroRadius;
     public float attackRadius;
 
-
+    [SerializeField] List<GameObject> meshParts = new List<GameObject>();
     GameManager manager;
 
     Rigidbody rb;
@@ -52,6 +56,7 @@ public class Fish : MonoBehaviour, IDamageable
     public EnemyFleeingState fleeingState;
     public EnemyGrappledState grappledState;
     public EnemyRecoveringState recoveringState;
+    public EnemyDeathState deathState;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -66,6 +71,7 @@ public class Fish : MonoBehaviour, IDamageable
         fleeingState = new EnemyFleeingState(this, stateMachine);
         grappledState = new EnemyGrappledState(this, stateMachine);
         recoveringState = new EnemyRecoveringState(this, stateMachine);
+        deathState = new EnemyDeathState(this, stateMachine);
 
         stateMachine.CurrentState = idleState;
 
@@ -161,23 +167,26 @@ public class Fish : MonoBehaviour, IDamageable
 
     public void Damage(float damage, Vector3 point)
     {
-        currentHealth -= damage;
-        manager.damageDealt.IncreaseStat(damage);
-        healthbarVisibilityCooldown.StartCooldown();
-        if (damage > 5)
+        if (!dead)
         {
-            Instantiate(blood, point, Quaternion.identity);
-        } else
-        {
-            Instantiate(bloodLight, point, Quaternion.identity);
-        }
-        if (currentHealth <= 0)
-        {
-            Die();
-            
-        }
+            currentHealth -= damage;
+            manager.damageDealt.IncreaseStat(damage);
+            healthbarVisibilityCooldown.StartCooldown();
+            if (damage > 5)
+            {
+                Instantiate(blood, point, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(bloodLight, point, Quaternion.identity);
+            }
+            if (currentHealth <= 0)
+            {
+                Die();
+                dead = true;
+            }
 
-        
+        }
     }
 
     public void Damage(float damage)
@@ -191,7 +200,11 @@ public class Fish : MonoBehaviour, IDamageable
     {
         manager.freezeEnemies -= OnFreezeEnemies;
         manager.enemiesKilled.IncreaseStat(1);
-        Destroy(gameObject);
+        manager.doubloons += (int) (doubloons * manager.globalDifficulty);
+        manager.doubloonsEarned.IncreaseStat((int)(doubloons * manager.globalDifficulty));
+        stateMachine.ChangeState(deathState);
+        stateMachine.locked = true;
+        StartCoroutine(DeathDissolve(3));
     }
 
     public void Knockback(Vector3 direction, float strength)
@@ -245,5 +258,24 @@ public class Fish : MonoBehaviour, IDamageable
     public void UnconstrainRigidbody()
     {
         rb.constraints = RigidbodyConstraints.None;
+    }
+
+    public IEnumerator DeathDissolve(float time)
+    {
+        float t = 0;
+        yield return new WaitForSeconds(2);
+        while (t < time)
+        {
+            t += Time.deltaTime;
+
+            for (int i = 0; i < meshParts.Count; i++)
+            {
+                
+                meshParts[i].GetComponent<Renderer>().material.SetFloat("_DissolveAmount", t / time);
+            }
+            yield return null;
+            
+        }
+        Destroy(gameObject);
     }
 }
