@@ -8,7 +8,7 @@ public class DeathScreenTransition : MonoBehaviour
 {
 
     [SerializeField] Image flashImage;
-    [SerializeField] Image theInfiniteVoid;
+
     [SerializeField] Color flashColor;
     [SerializeField] Color restartFlashColor;
 
@@ -22,12 +22,14 @@ public class DeathScreenTransition : MonoBehaviour
     [SerializeField] LayerMask deathMask;
     [SerializeField] LayerMask normalMask;
 
+    [SerializeField] Light sun;
+
     GameManager gameManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         RenderSettings.fogEndDistance = 35;
-        theInfiniteVoid.color = Color.white;
+
         restartFlashColor = Color.white;
         gameManager = FindFirstObjectByType<GameManager>();
         flashImage.color = new Color(flashColor.r, flashColor.g, flashColor.b, 0);
@@ -71,10 +73,11 @@ public class DeathScreenTransition : MonoBehaviour
             time += Time.unscaledDeltaTime;
         }
         mainCamera.cullingMask = deathMask;
-        theInfiniteVoid.color = Color.black;
+
         time = 0;
         RenderSettings.fogEndDistance = 20;
         RenderSettings.fogColor = Color.black;
+        sun.transform.eulerAngles = new Vector3(-90, 0 , 0);
         Debug.Log(RenderSettings.fogEndDistance);
         gameManager.arena.SetActive(false);
         gameManager.FreezeEnemyPositions();

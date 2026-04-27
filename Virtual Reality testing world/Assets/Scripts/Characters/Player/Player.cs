@@ -3,6 +3,7 @@ using System;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using System.Collections;
+using System.Collections.Generic;
 public class Player : MonoBehaviour, IDamageable
 {
     [Header("Healing")] 
@@ -30,7 +31,11 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] GameObject DeathDoor;
     [SerializeField] GameObject WinScreen;
 
-    
+    GameManager manager;
+
+    [SerializeField] List<AudioClip> eatSounds = new List<AudioClip>();
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,7 +43,7 @@ public class Player : MonoBehaviour, IDamageable
         eatCooldown = new Cooldown(fishEatRate);
         currentHealth = maxHealth;
 
-
+        manager = FindAnyObjectByType<GameManager>();
     }
 
     // Update is called once per frame
@@ -75,7 +80,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         currentHealth -= damage;
 
-
+        manager.damageReceived.IncreaseStat(damage);
         if (currentHealth < 0)
         {
             Die();
@@ -100,7 +105,8 @@ public class Player : MonoBehaviour, IDamageable
             dead = true;
             deathScreenTransition.TransitionToDeathScreen();
             DeathDoor.transform.parent = null;
-            Instantiate(WinScreen, Camera.main.transform.position + transform.forward * 5, Quaternion.identity);
+            GameObject winscreen = Instantiate(WinScreen, Camera.main.transform.position + transform.forward * 5, Quaternion.identity);
+            FindFirstObjectByType<GameManager>().combatActive = false;
         }
     }
 
@@ -137,6 +143,7 @@ public class Player : MonoBehaviour, IDamageable
                         eatCooldown.StartCooldown();
                         fish.Damage(fishEatDamage);
                         Heal(fish.healthPerBite);
+                        AudioSource.PlayClipAtPoint(eatSounds[UnityEngine.Random.Range(0, eatSounds.Count)], Camera.main.transform.position);
                         //play eat noise
                     }
                 }

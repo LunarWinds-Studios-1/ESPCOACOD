@@ -300,6 +300,7 @@ MonoBehaviour:
   overhealSlider: {fileID: 3823170667371102402}
   maxHealth: 0
   lerpSpeed: 0.05
+  billboard: 0
 --- !u!114 &1717108638808880325
 MonoBehaviour:
   m_ObjectHideFlags: 0

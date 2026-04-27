@@ -19,7 +19,7 @@ public class EnemyTrackingState : EnemyState
         if (fish.active && fish.agent.isOnNavMesh)
         {
             fish.agent.destination = new Vector3(fish.target.position.x, -13, fish.target.position.z);
-        } if (!fish.agent.isOnNavMesh)
+        } if (!fish.agent.isOnNavMesh && !fish.frozen)
         {
             Vector3 reference = Vector3.zero;
             fish.agent.baseOffset = 0;

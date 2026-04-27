@@ -41,7 +41,11 @@ public class HealthBar : MonoBehaviour
     public void Billboard()
     {
         Vector3 targetPos = Camera.main.transform.position;
-
         transform.LookAt(targetPos);
+    }
+
+    public void SetVisible(bool visible)
+    {
+        GetComponent<Canvas>().enabled = visible;
     }
 }

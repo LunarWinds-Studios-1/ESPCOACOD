@@ -11,11 +11,14 @@ public class Fish : MonoBehaviour, IDamageable
     [SerializeField] GameObject blood;
     [SerializeField] GameObject bloodLight;
     [SerializeField] HealthBar healthBar;
+    [SerializeField] float healthBarVisibilityTime;
+    Cooldown healthbarVisibilityCooldown;
     [SerializeField] public Animator animator;
     public float healthPerBite = 10;
     [HideInInspector] public NavMeshAgent agent;
 
     public Vector3 damagePoint;
+    public bool frozen = false;
 
     [SerializeField] public Transform target;
 
@@ -36,6 +39,7 @@ public class Fish : MonoBehaviour, IDamageable
     public float aggroRadius;
     public float attackRadius;
 
+
     GameManager manager;
 
     Rigidbody rb;
@@ -52,6 +56,7 @@ public class Fish : MonoBehaviour, IDamageable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        healthbarVisibilityCooldown = new Cooldown(healthBarVisibilityTime);
         manager = FindFirstObjectByType<GameManager>();
         manager.freezeEnemies += OnFreezeEnemies;
         stateMachine = new EnemyStateMachine();
@@ -67,9 +72,12 @@ public class Fish : MonoBehaviour, IDamageable
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
         cooldownTime = UnityEngine.Random.Range(0.5f, 10);
+        maxHealth *= manager.globalDifficulty;
         currentHealth = maxHealth;
 
         healthBar?.Initialize(maxHealth);
+        healthBar.SetVisible(false);
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -81,6 +89,8 @@ public class Fish : MonoBehaviour, IDamageable
         healthBar?.SetHealth(currentHealth);
 
         stateMachine.CurrentState.Update();
+
+        healthBar.SetVisible(healthbarVisibilityCooldown.isCoolingDown);
     }
 
     public void OnEnterDetectionRadius()
@@ -152,6 +162,8 @@ public class Fish : MonoBehaviour, IDamageable
     public void Damage(float damage, Vector3 point)
     {
         currentHealth -= damage;
+        manager.damageDealt.IncreaseStat(damage);
+        healthbarVisibilityCooldown.StartCooldown();
         if (damage > 5)
         {
             Instantiate(blood, point, Quaternion.identity);
@@ -178,6 +190,7 @@ public class Fish : MonoBehaviour, IDamageable
     public void Die()
     {
         manager.freezeEnemies -= OnFreezeEnemies;
+        manager.enemiesKilled.IncreaseStat(1);
         Destroy(gameObject);
     }
 
@@ -220,6 +233,7 @@ public class Fish : MonoBehaviour, IDamageable
         agent.speed = 0;
         agent.enabled = false;
         animator.speed = 0;
+        frozen = true;
     }
 
 

@@ -3854,17 +3854,6 @@ MonoBehaviour:
   deathScreenTransition: {fileID: 1678625616}
   DeathDoor: {fileID: 351791977}
   WinScreen: {fileID: 8072366934827266621, guid: e6f1ae295520cf44584f4fbba75295d8, type: 3}
-  eatSounds:
-  - {fileID: 8300000, guid: 88ff5ac6cfae21d47a7cb6baa4736e80, type: 3}
-  - {fileID: 8300000, guid: 7d59a0b8eff995c4382d332bfead9201, type: 3}
-  - {fileID: 8300000, guid: 992ff2cc382be6f41a5d793a12e5c88d, type: 3}
-  - {fileID: 8300000, guid: 69268713ad5effe47b0d7ae05908efe1, type: 3}
-  - {fileID: 8300000, guid: 0810a4606f26a664cb11ad81da38e50a, type: 3}
-  - {fileID: 8300000, guid: 86b1a8b69d96fec4baa51f426a8185c5, type: 3}
-  - {fileID: 8300000, guid: 333100ca59c085447b0bb02bf2105b59, type: 3}
-  - {fileID: 8300000, guid: 69efeece27845fe4081ff776edb7be5f, type: 3}
-  - {fileID: 8300000, guid: 4974cea12d990064d8bc26ae27d6bd0b, type: 3}
-  - {fileID: 8300000, guid: ef363606bc08ee64ca30b2ff88790107, type: 3}
 --- !u!20 &1678625615 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 3114898240329056919, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}

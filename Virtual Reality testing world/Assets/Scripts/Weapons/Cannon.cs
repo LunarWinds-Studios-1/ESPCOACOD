@@ -100,7 +100,6 @@ public class Cannon : Gun
         trajectory.positionCount = points;
         float yVel = -projectileVelocity * Mathf.Sin(fireOrigin.eulerAngles.x * Mathf.Deg2Rad);
         float xVel = projectileVelocity * Mathf.Cos(fireOrigin.eulerAngles.x * Mathf.Deg2Rad);
-        Debug.Log("Projected Velocities: X: " + xVel + " Y: " + yVel);
         for (int i = 0; i < points; i++)
         {
             float deltaT = maxTrajectoryDistance / (float)points;
