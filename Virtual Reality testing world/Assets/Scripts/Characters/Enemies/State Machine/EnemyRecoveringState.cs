@@ -29,11 +29,14 @@ public class EnemyRecoveringState : EnemyState
     public IEnumerator Reorient()
     {
         yield return new WaitForSeconds(2);
+        Vector3 initialRotation = new Vector3(fish.transform.eulerAngles.x, fish.transform.rotation.eulerAngles.y, fish.transform.eulerAngles.z);
         fish.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
-        Vector3 reference = Vector3.zero;
-        while (Mathf.Abs(Vector3.Distance(fish.transform.eulerAngles, Vector3.zero)) > 0.5f)
+        float reorientTime = 2;
+        float t = 0;
+        while (t < reorientTime)
         {
-            fish.transform.eulerAngles = Vector3.SmoothDamp(fish.transform.eulerAngles, Vector3.zero, ref reference, 0.1f);
+            fish.transform.eulerAngles = Vector3.Lerp(initialRotation, Vector3.zero, t / reorientTime);
+            t+= Time.deltaTime;
             yield return null;
         }
         fish.transform.eulerAngles = Vector3.zero;

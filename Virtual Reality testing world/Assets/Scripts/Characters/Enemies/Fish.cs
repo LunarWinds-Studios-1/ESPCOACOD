@@ -191,7 +191,8 @@ public class Fish : MonoBehaviour, IDamageable
 
     public void Damage(float damage)
     {
-        Damage(damage, transform.position);
+        Debug.Log(transform.position);
+        Damage(damage, this.transform.position);
     }
 
 
@@ -204,6 +205,7 @@ public class Fish : MonoBehaviour, IDamageable
         manager.doubloonsEarned.IncreaseStat((int)(doubloons * manager.globalDifficulty));
         stateMachine.ChangeState(deathState);
         stateMachine.locked = true;
+        manager.DespawnEnemy(this);
         StartCoroutine(DeathDissolve(3));
     }
 
