@@ -34,6 +34,8 @@ public class Harpoon : MonoBehaviour
     public DistanceJoint3D joint;
     public float reelSpeed = 5;
 
+    public bool active = false;
+
     [HideInInspector] public GameObject grabbedObject;
 
     [Header("Aim Indicator")]
@@ -57,7 +59,7 @@ public class Harpoon : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         joint = GetComponent<DistanceJoint3D>();
         stateMachine.Initialize(idleState);
-        
+        playerRB = FindFirstObjectByType<Player>().GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -75,6 +77,7 @@ public class Harpoon : MonoBehaviour
 
     public void UpdateAimIndicator()
     {
+        indicator.GetComponent<MeshRenderer>().enabled = active;
         Physics.Raycast(transform.position, transform.forward, out aimIndicatorHit, maxDistance, targetableLayerMask);
         if (grappleMode)
         {

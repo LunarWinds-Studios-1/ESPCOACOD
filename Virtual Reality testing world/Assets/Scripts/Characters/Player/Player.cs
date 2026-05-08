@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IDamageable
     [Header("Fish Eating")]
     [SerializeField] float fishEatRate = 0.5f;
     [SerializeField] float fishEatDamage = 5;
-    [SerializeField] Harpoon harpoon;
+    [SerializeField] HarpoonGun harpoonGun;
     [SerializeField] EatHitBox eatHitbox;
 
     Cooldown eatCooldown;
@@ -131,11 +131,11 @@ public class Player : MonoBehaviour, IDamageable
 
     public void EatFish()
     {
-        if (harpoon.grabbedObject != null && harpoon.grabbedObject.GetComponent<Fish>() != null)
+        if (harpoonGun.currentHarpoon.GetComponent<Harpoon>().grabbedObject != null && harpoonGun.currentHarpoon.GetComponent<Harpoon>().grabbedObject.GetComponent<Fish>() != null)
         {
             if (eatHitbox.obj != null)
             {
-                Fish fish = harpoon.grabbedObject.GetComponent<Fish>();
+                Fish fish = harpoonGun.currentHarpoon.GetComponent<Harpoon>().grabbedObject.GetComponent<Fish>();
                 if (eatHitbox.obj == fish.gameObject)
                 {
                     if (!eatCooldown.isCoolingDown)

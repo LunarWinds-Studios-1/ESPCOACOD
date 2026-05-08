@@ -1620,6 +1620,17 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &1467800444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9145893910068585388, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
+  m_PrefabInstance: {fileID: 1678625593}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6d2bae3cd71dcd49ac54542d5c79549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HarpoonGun
 --- !u!1001 &1678625593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1628,6 +1639,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 816877669059250768, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
+      propertyPath: m_Name
+      value: Harpoon Gun
+      objectReference: {fileID: 0}
     - target: {fileID: 1675122751989011503, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1764,6 +1779,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7760454061531803370, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
+      propertyPath: harpoon
+      value: 
+      objectReference: {fileID: 1809048353}
+    - target: {fileID: 7760454061531803370, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
+      propertyPath: harpoonGun
+      value: 
+      objectReference: {fileID: 1467800444}
     - target: {fileID: 8235147194381830660, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
       propertyPath: m_Size.z
       value: 57.86
@@ -1785,6 +1808,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2608438624668761575, guid: b1df26d8af882e24d99872471f9baf2c, type: 3}
   m_PrefabInstance: {fileID: 172061556}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1809048353 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8646728598256864744, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
+  m_PrefabInstance: {fileID: 1678625593}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275d26d8379d1514fb35f83504600f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Harpoon
 --- !u!1 &2020248249 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1540609410974054968, guid: 313899db7f24bdd47aae1e7f18868d47, type: 3}
