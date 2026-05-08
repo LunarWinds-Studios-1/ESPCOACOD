@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class Hurtbox : MonoBehaviour
 {
@@ -16,6 +15,10 @@ public class Hurtbox : MonoBehaviour
         if ((damageMask.value & (1 << other.transform.gameObject.layer)) > 0)
         {
             other?.GetComponent<IDamageable>()?.Damage((float) damage * manager.globalDifficulty);
+            if (GetComponent<AudioSource>() != null)
+            {
+                GetComponent<AudioSource>().Play();
+            }
         }
     }
 }

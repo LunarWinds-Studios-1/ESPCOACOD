@@ -31,7 +31,6 @@ public class Cannon : Gun
         cannonBall.damageMask = damageMask;
         cannonBall.damage = damage;
         rb.linearVelocity = fireOrigin.forward * projectileVelocity;
-        Debug.Log("Actual Velocities: X: " + new Vector2(rb.linearVelocity.x, rb.linearVelocity.z).magnitude + " Y: " + rb.linearVelocity.y);
 
     }
     public override void Start()

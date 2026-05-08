@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour, IDamageable
 {
     [Header("Healing")] 
-    [SerializeField] float maxHealth;
-    [SerializeField] float currentHealth;
+    [SerializeField] public float maxHealth;
+    [SerializeField] public float currentHealth;
     [SerializeField] float overhealDepletion = 10;
     [SerializeField] HealthBar playerHealthBar;
     [SerializeField] bool debugMode = false;

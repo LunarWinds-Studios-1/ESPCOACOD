@@ -39,7 +39,7 @@ public class Gun : Weapon
             }
             
         }
-        Debug.Log("PEW!");
+        Debug.Log(hit.collider.name);
     }
 
     public Vector3 GetTrajectoryOffset(float bulletSpreadAmount)

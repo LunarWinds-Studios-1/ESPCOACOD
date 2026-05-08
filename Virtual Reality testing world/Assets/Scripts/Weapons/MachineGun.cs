@@ -19,6 +19,9 @@ public class MachineGun : Gun
 
     AudioSource ambient;
 
+    [SerializeField] GameObject barrel;
+    float rotationSpeed;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Start()
     {
@@ -59,7 +62,17 @@ public class MachineGun : Gun
         {
             currentFireTime -= Time.deltaTime;
         }
+        if (firing)
+        {
+            RotateBarrel();
+        }
         currentFireTime = Mathf.Clamp(currentFireTime, 0, maxFireTime);
+    }
+
+    public void RotateBarrel()
+    {
+        rotationSpeed = (360 / 6) * fireRate;
+        barrel.transform.Rotate(new Vector3(0, 0, rotationSpeed * Time.deltaTime));
     }
 
     public override void FireBullet()

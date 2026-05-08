@@ -89,7 +89,6 @@ public class RadialSelection : MonoBehaviour
             if (i == selectedIndex)
             {
                 selected = true;
-                Debug.Log("You are hovering over " + i);
             }
 
             parts[i]?.GetComponent<RadialPart>().SetSelected(selected);

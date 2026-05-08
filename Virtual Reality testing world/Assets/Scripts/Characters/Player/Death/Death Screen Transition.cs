@@ -75,7 +75,8 @@ public class DeathScreenTransition : MonoBehaviour
         mainCamera.cullingMask = deathMask;
 
         time = 0;
-        RenderSettings.fogEndDistance = 20;
+        RenderSettings.fogMode = FogMode.Exponential;
+        RenderSettings.fogDensity = 0.075f;
         RenderSettings.fogColor = Color.black;
         sun.transform.eulerAngles = new Vector3(-90, 0 , 0);
         Debug.Log(RenderSettings.fogEndDistance);

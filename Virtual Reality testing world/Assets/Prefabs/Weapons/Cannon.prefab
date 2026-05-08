@@ -61,15 +61,17 @@ MonoBehaviour:
   range: 50
   fireOrigin: {fileID: 4703708425648171606}
   bulletTravelTime: 0.1
-  fireSound: {fileID: 8300000, guid: 16fba6d30ed741d4a9fdd6e79ee2f3ac, type: 3}
+  fireSound: {fileID: 8300000, guid: 7baff0ab8747df84690e3e8f297c2ae9, type: 3}
   cannonball: {fileID: 3441708119246021579, guid: cff3b4cb5e9ee1a4b9cf065a173e5e38, type: 3}
   trajectory: {fileID: 2192401061366633392}
   points: 100
   chargeTime: 2
+  reloadTime: 10
   minimumVelocity: 5
   maximumVelocity: 15
   shakeIntensity: 0.25
   blastParticles: {fileID: 3433173473348331600}
+  chargeSlider: {fileID: 0}
 --- !u!120 &2192401061366633392
 LineRenderer:
   serializedVersion: 3

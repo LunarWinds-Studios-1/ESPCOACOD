@@ -2,12 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-
+[RequireComponent(typeof(AudioSource))]
 public class Fish : MonoBehaviour, IDamageable
 {
-    [SerializeField] float maxHealth = 15;
+    [SerializeField] protected float maxHealth = 15;
     [SerializeField] float currentHealth;
     [SerializeField] public float moveSpeed = 3;
     [SerializeField] GameObject blood;
@@ -18,6 +19,7 @@ public class Fish : MonoBehaviour, IDamageable
     [SerializeField] public Animator animator;
     public float healthPerBite = 10;
     [HideInInspector] public NavMeshAgent agent;
+    [SerializeField] LayerMask geometryLayerMask;
     [SerializeField] int doubloons = 3;
 
     public Vector3 damagePoint;
@@ -48,6 +50,9 @@ public class Fish : MonoBehaviour, IDamageable
 
     Rigidbody rb;
 
+    public GameObject child;
+    public Vector3 targetPosition;
+
     //State machine stuff
     public EnemyStateMachine stateMachine;
     public EnemyIdleState idleState;
@@ -57,21 +62,22 @@ public class Fish : MonoBehaviour, IDamageable
     public EnemyGrappledState grappledState;
     public EnemyRecoveringState recoveringState;
     public EnemyDeathState deathState;
-    
+
+    [SerializeField] public List<AudioClip> hurtSounds = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> bigHurtSounds = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> attackSounds = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> death = new List<AudioClip>();
+    [SerializeField] public List<AudioClip> grappledSounds = new List<AudioClip>();
+    [HideInInspector] public AudioSource audioSource;
+    public AudioSource grappleSource;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         healthbarVisibilityCooldown = new Cooldown(healthBarVisibilityTime);
         manager = FindFirstObjectByType<GameManager>();
         manager.freezeEnemies += OnFreezeEnemies;
-        stateMachine = new EnemyStateMachine();
-        idleState = new EnemyIdleState(this, stateMachine);
-        trackingState = new EnemyTrackingState(this, stateMachine);
-        attackingState = new EnemyAttackingState(this, stateMachine);
-        fleeingState = new EnemyFleeingState(this, stateMachine);
-        grappledState = new EnemyGrappledState(this, stateMachine);
-        recoveringState = new EnemyRecoveringState(this, stateMachine);
-        deathState = new EnemyDeathState(this, stateMachine);
+        InstantiateStates();
 
         stateMachine.CurrentState = idleState;
 
@@ -83,8 +89,21 @@ public class Fish : MonoBehaviour, IDamageable
 
         healthBar?.Initialize(maxHealth);
         healthBar.SetVisible(false);
-
+        agent.updateRotation = false;
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    public virtual void InstantiateStates()
+    {
+        stateMachine = new EnemyStateMachine();
+        idleState = new EnemyIdleState(this, stateMachine);
+        trackingState = new EnemyTrackingState(this, stateMachine);
+        attackingState = new EnemyAttackingState(this, stateMachine);
+        fleeingState = new EnemyFleeingState(this, stateMachine);
+        grappledState = new EnemyGrappledState(this, stateMachine);
+        recoveringState = new EnemyRecoveringState(this, stateMachine);
+        deathState = new EnemyDeathState(this, stateMachine);
     }
 
     // Update is called once per frame
@@ -124,6 +143,11 @@ public class Fish : MonoBehaviour, IDamageable
     {
         stateMachine.CurrentState.OnAnimationFinish();
     }
+
+    public void OnSoundEvent()
+    {
+        stateMachine.CurrentState.OnSoundEvent();
+    }
     public virtual void FixedUpdate()
     {
         stateMachine.CurrentState.PhysicsUpdate();
@@ -159,16 +183,41 @@ public class Fish : MonoBehaviour, IDamageable
     {
         float agentGroundHeight = transform.position.y - agent.baseOffset;
         float targetBaseOffset = targetPos.y - agentGroundHeight + randomHeightOffset;
+        float upperBounds = 100;
+        float lowerBounds = -100;
+        RaycastHit hit;
+        Physics.Raycast(transform.position, transform.up, out hit, 100, geometryLayerMask);
+
+        if (hit.collider != null)
+        {
+            upperBounds = hit.point.y - agentGroundHeight + randomHeightOffset;
+        }
+
+        Physics.Raycast(transform.position, -transform.up, out hit, 100, geometryLayerMask);
+
+        if (hit.collider != null)
+        {
+            lowerBounds = hit.point.y - agentGroundHeight + randomHeightOffset;
+        }
+
+        targetBaseOffset = Mathf.Clamp(targetBaseOffset, lowerBounds, upperBounds);
 
         float v = 0;
 
         agent.baseOffset = Mathf.SmoothDamp(agent.baseOffset, targetBaseOffset, ref v, 0.2f);
     }
 
-    public void Damage(float damage, Vector3 point)
+    public float GetTargetHeight(Vector3 targetPos)
+    {
+        return targetPos.y;
+    }
+
+    public virtual void Damage(float damage, Vector3 point)
     {
         if (!dead)
         {
+            audioSource.clip = hurtSounds[UnityEngine.Random.Range(0, hurtSounds.Count)];
+            audioSource.Play();
             currentHealth -= damage;
             manager.damageDealt.IncreaseStat(damage);
             healthbarVisibilityCooldown.StartCooldown();
@@ -191,7 +240,6 @@ public class Fish : MonoBehaviour, IDamageable
 
     public void Damage(float damage)
     {
-        Debug.Log(transform.position);
         Damage(damage, this.transform.position);
     }
 
@@ -280,4 +328,20 @@ public class Fish : MonoBehaviour, IDamageable
         }
         Destroy(gameObject);
     }
+
+    public void AlignToTargetDirection()
+    {
+        float reference = 0;
+        var targetRotation = Quaternion.LookRotation(targetPosition - child.transform.position);
+        var delta = Quaternion.Angle(child.transform.rotation, targetRotation);
+
+        if (delta > 0)
+        {
+            var t = Mathf.SmoothDampAngle(delta, 0.0f, ref reference, 0.1f);
+            t = 1.0f - t / delta;
+            child.transform.rotation = Quaternion.Slerp(child.transform.rotation, targetRotation, t);
+        }
+
+    }
+
 }

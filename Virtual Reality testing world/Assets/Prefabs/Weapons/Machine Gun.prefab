@@ -4903,6 +4903,7 @@ MonoBehaviour:
   rechargeTime: 5
   currentFireTime: 0
   rechargeSound: {fileID: 8300000, guid: d560b6f79c5a28142b1da97627e770f6, type: 3}
+  barrel: {fileID: 6535311258400255473}
 --- !u!82 &2488034805371632632
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9987,5 +9988,10 @@ PrefabInstance:
 --- !u!4 &5612404828764802221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 077a1f8f308c0d84199dbbec04fbd1d4, type: 3}
+  m_PrefabInstance: {fileID: 5362095049755323206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6535311258400255473 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1214824004972775095, guid: 077a1f8f308c0d84199dbbec04fbd1d4, type: 3}
   m_PrefabInstance: {fileID: 5362095049755323206}
   m_PrefabAsset: {fileID: 0}

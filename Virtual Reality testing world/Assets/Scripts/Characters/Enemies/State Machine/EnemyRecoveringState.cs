@@ -12,10 +12,20 @@ public class EnemyRecoveringState : EnemyState
     public override void EnterState() 
     {
         fish.StartCoroutine(Reorient());
+        if (fish.GetComponent<Squid>() != null)
+        {
+            fish.animator.SetTrigger("Stun");
+            fish.animator.SetBool("Stunned", true);
+        }
     }
     public override void ExitState() 
     {
         fish.ConstrainRigidbody();
+        if (fish.GetComponent<Squid>() != null)
+        {
+            //fish.animator.SetTrigger("Stun");
+            fish.animator.SetBool("Stunned", false);
+        }
     }
     public override void PhysicsUpdate() { }
     public override void Update() { }

@@ -182,7 +182,6 @@ public class GameManager : MonoBehaviour
             if (enemy.minumumSpawningWave <= wave && enemy.tokenCost <= budget)
             {
                 availableEnemies.Add(enemy);
-                Debug.Log(enemy.name);
             }
         }
         return availableEnemies;
@@ -251,7 +250,6 @@ public class GameManager : MonoBehaviour
                     break;
                 }
             }
-            Debug.Log(tokenBudget);
         }
 
         StartCoroutine(SpawnEnemyQueue(enemySpawnQueue));

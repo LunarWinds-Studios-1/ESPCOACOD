@@ -7,6 +7,10 @@ public class FishAnimationHandler : MonoBehaviour
     public void OnAnimationFinish()
     {
         fish.OnAnimationFinish();
-        Debug.Log("ATTACK FINISHED!");
+    }
+
+    public void OnSoundEvent()
+    {
+        fish.OnSoundEvent();
     }
 }

@@ -2,14 +2,21 @@ using UnityEngine;
 
 public class Serpent : MonoBehaviour
 {
-    [SerializeField] Vector3 targetPosition;
+    [SerializeField] public Vector3 targetPosition;
+    public Vector3 origin;
     Rigidbody rb;
 
     [SerializeField] public float speed = 5;
+    [SerializeField] float travelDistance = 50;
+    float waitTime = 5;
+    Cooldown waitCooldown;
+    bool firstTargetReached = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        waitCooldown = new Cooldown(waitTime);
         rb = GetComponent<Rigidbody>();
+        waitCooldown.StartCooldown();
     }
 
     // Update is called once per frame
@@ -18,8 +25,10 @@ public class Serpent : MonoBehaviour
         AlignToTargetDirection();
         rb.linearVelocity = transform.forward * speed;
 
-        if (Mathf.Abs(Vector3.Distance(targetPosition, transform.position)) < 2){
-            targetPosition = Random.insideUnitSphere * 50;
+        if (Mathf.Abs(Vector3.Distance(targetPosition, transform.position)) < 15 || !waitCooldown.isCoolingDown){
+
+            targetPosition = origin + Random.insideUnitSphere.normalized * travelDistance;
+            waitCooldown.StartCooldown();
         }
     }
 
@@ -37,12 +46,11 @@ public class Serpent : MonoBehaviour
 
         if (delta > 0)
         {
-            var t = Mathf.SmoothDampAngle(delta, 0.0f, ref reference, 0.1f);
+            var t = Mathf.SmoothDampAngle(delta, 0.0f, ref reference, 0.2f);
             t = 1.0f - t / delta;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, t);
         }
-        //Debug.Log(targetRotation);
-        //transform.eulerAngles = Vector3.SmoothDamp(transform.eulerAngles, targetRotation, ref reference, 0.1f);
+
     }
 
 

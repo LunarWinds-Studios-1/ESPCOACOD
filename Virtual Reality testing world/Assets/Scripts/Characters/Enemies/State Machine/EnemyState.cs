@@ -28,4 +28,9 @@ public class EnemyState
     {
 
     }
+
+    public virtual void OnSoundEvent()
+    {
+
+    }
 }

@@ -24,4 +24,11 @@ public class EnemyAttackingState : EnemyState
     {
         enemyStateMachine.ChangeState(fish.fleeingState);
     }
+
+    public override void OnSoundEvent()
+    {
+        base.OnSoundEvent();
+        fish.audioSource.clip = fish.attackSounds[Random.Range(0, fish.attackSounds.Count)];
+        fish.audioSource.Play();
+    }
 }

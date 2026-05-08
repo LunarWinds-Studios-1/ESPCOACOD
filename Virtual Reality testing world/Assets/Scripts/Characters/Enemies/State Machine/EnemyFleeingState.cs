@@ -8,6 +8,7 @@ public class EnemyFleeingState : EnemyState
     Cooldown fleeCooldown;
     float targetHeight;
     Vector2 Direction;
+    Squid squid;
     public override void EnterState() 
     {
         fish.animator.SetBool("Swimming", true);
@@ -18,12 +19,24 @@ public class EnemyFleeingState : EnemyState
         Direction = Random.insideUnitCircle.normalized * 10;
         targetHeight = Random.Range(-2, 2);
         fish.agent.destination = new Vector3(fish.transform.position.x + Direction.x, 0, fish.transform.position.z + Direction.y);
+        if (fish.GetComponent<Squid>() != null)
+        {
+            squid = fish.GetComponent<Squid>();
+            squid.particles.Play();
+            squid.animator.SetTrigger("Hit");
+            squid.animator.SetBool("Fleeing", true);
+        }
         //Debug.Log(Direction);
     }
     public override void ExitState() 
     {
         fish.agent.speed = fish.moveSpeed;
         fish.animator.SetBool("Swimming", false);
+        if (squid != null)
+        {
+            squid.particles.Stop();
+            squid.animator.SetBool("Fleeing", false );
+        }
     }
     public override void PhysicsUpdate() { }
     public override void Update() 
@@ -33,7 +46,8 @@ public class EnemyFleeingState : EnemyState
             enemyStateMachine.ChangeState(fish.idleState);
         }
         fish.ApproachTargetHeight(new Vector3(Direction.x, fish.transform.position.y + targetHeight, Direction.y));
-        
+        fish.targetPosition = new Vector3(fish.agent.destination.x, fish.GetTargetHeight(new Vector3(Direction.x, fish.transform.position.y + targetHeight, Direction.y)), fish.agent.destination.z);
+        fish.AlignToTargetDirection();
         /*Debug.Log(Mathf.Abs(Vector3.Distance(new Vector3(fish.transform.position.x, 0, fish.transform.position.z), fish.agent.destination)) - fish.agent.stoppingDistance + " -> " + "0.3\n" + fish.agent.destination);
         if (Mathf.Abs(Vector3.Distance(new Vector3(fish.transform.position.x, 0, fish.transform.position.z), fish.agent.destination)) - fish.agent.stoppingDistance <= 1f)
         {
